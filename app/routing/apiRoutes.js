@@ -22,8 +22,10 @@ apiRouter.get("/api/friends", function(req, res) {
 
 apiRouter.post("/api/friends", function(req, res) {
 
+
   console.log(req.body);
   newFriend = req.body;
+  var bestMatch;
 
   //PARSING THE SCORES SO THAT WE GET INT VALUES OR THE SCORES ARRAY
   newFriend.scores = newFriend.scores.map(elem => parseInt(elem))
@@ -32,11 +34,21 @@ apiRouter.post("/api/friends", function(req, res) {
   friends.push(newFriend)
   friends.forEach(function(elem){
     console.log(elem.scores);
-    
+    friendsTotal = elem.scores.reduce((a,b)=> a+b,0)
+    userTotal = newFriend.scores.redeuce((a,b)=>a+b,0)
+    matchNum = Math.abs(friendsTotal-userTotal)
+    if(matchNum<3){
+      bestMatch = elem
+    }
+    else{
+      bastMatch = newFriend
+    }
+
+
 
   });
 
-  res.json(newFriend)
+  res.json(bestMatch)
 });
 
 module.exports = apiRouter;
